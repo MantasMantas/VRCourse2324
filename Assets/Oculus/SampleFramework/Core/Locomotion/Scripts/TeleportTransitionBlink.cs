@@ -1,10 +1,10 @@
 /************************************************************************************
-
-See SampleFramework license.txt for license terms.  Unless required by applicable law
-or agreed to in writing, the sample code is provided "AS IS" WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied.  See the license for specific
+ 
+See SampleFramework license.txt for license terms.  Unless required by applicable law 
+or agreed to in writing, the sample code is provided “AS IS” WITHOUT WARRANTIES OR 
+CONDITIONS OF ANY KIND, either express or implied.  See the license for specific 
 language governing permissions and limitations under the license.
-
+ 
 ************************************************************************************/
 
 using System;
@@ -12,11 +12,12 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// This transition will cause the screen to quickly fade to black, perform the repositioning, and then fade
+/// This transition will cause the screen to quickly fade to black, perform the repositioning, and then fade 
 /// the view back to normal.
 /// </summary>
 public class TeleportTransitionBlink : TeleportTransition
 {
+    public OVRScreenFade fader;
     /// <summary>
     /// How long the transition takes. Usually this is greater than Teleport Delay.
     /// </summary>
@@ -35,8 +36,7 @@ public class TeleportTransitionBlink : TeleportTransition
     /// Fade to black over the duration of the transition.
     /// </summary>
     [Tooltip("Fade to black over the duration of the transition")]
-    public AnimationCurve FadeLevels = new AnimationCurve(new Keyframe[3]
-        { new Keyframe(0, 0), new Keyframe(0.5f, 1.0f), new Keyframe(1.0f, 0.0f) });
+    public AnimationCurve FadeLevels = new AnimationCurve(new Keyframe[3] { new Keyframe(0, 0), new Keyframe(0.5f, 1.0f), new Keyframe(1.0f, 0.0f) });
 
     /// <summary>
     /// When the teleport state is entered, start a coroutine that will handle the
@@ -67,11 +67,11 @@ public class TeleportTransitionBlink : TeleportTransition
                 teleported = true;
                 LocomotionTeleport.DoTeleport();
             }
-            //float fadeLevel = FadeLevels.Evaluate(elapsedTime / TransitionDuration);
-            //OVRInspector.instance.fader.SetFadeLevel(fadeLevel);
+            float fadeLevel = FadeLevels.Evaluate(elapsedTime / TransitionDuration);
+            fader.SetUIFade(fadeLevel);
         }
 
-        //OVRInspector.instance.fader.SetFadeLevel(0);
+        fader.SetUIFade(0);
 
         LocomotionTeleport.IsTransitioning = false;
     }
